@@ -21,7 +21,7 @@ let songInfo = document.querySelector(".songInfo");
 // Fetch all folders in the music directory
 async function displayAlbum() {
   try {
-    const response = await fetch('/music');
+    const response = await fetch('/music'); // Use relative path
     const text = await response.text();
     const parser = new DOMParser();
     const htmlDoc = parser.parseFromString(text, 'text/html');
@@ -76,7 +76,7 @@ async function playSong(folder) {
 // Fetch songs from the given folder
 async function fetchSongs(folder) {
   try {
-    const response = await fetch(`http://127.0.0.1:5500/music/${folder}`);
+    const response = await fetch(`/music/${folder}`); // Use relative path
     const text = await response.text();
     const parser = new DOMParser();
     const htmlDoc = parser.parseFromString(text, "text/html");
@@ -84,7 +84,7 @@ async function fetchSongs(folder) {
 
     return Array.from(songElements)
       .map(element => {
-        const url = new URL(element.getAttribute("href"), `http://127.0.0.1:5500/${folder}/`);
+        const url = new URL(element.getAttribute("href"), `/music/${folder}/`); // Use relative path
         if (url.pathname.endsWith(".mp3") || url.pathname.endsWith(".m4a")) {
           return decodeURIComponent(url.pathname.split(`/${folder}/`)[1]).replace(/[+_]/g, " ");
         }
@@ -126,7 +126,7 @@ function updateSongList(songs) {
 function playMusic(track) {
   currentSongName = track;
   const encodedTrack = encodeURIComponent(track);
-  const songUrl = `http://127.0.0.1:5500/music/${currFolder}/${encodedTrack}`;
+  const songUrl = `/music/${currFolder}/${encodedTrack}`; // Use relative path
 
   currentSong.src = songUrl;
   currentSong.play();
