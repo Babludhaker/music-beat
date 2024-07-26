@@ -79,7 +79,7 @@ async function playSong(folder) {
 // Fetch songs from the given folder
 async function fetchSongs(folder) {
   try {
-    const response = await fetch(`http://127.0.0.1:5500/music/${folder}`);
+    const response = await fetch(`/music/${folder}/`);
     const text = await response.text();
     const parser = new DOMParser();
     const htmlDoc = parser.parseFromString(text, "text/html");
