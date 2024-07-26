@@ -21,13 +21,13 @@ let songInfo = document.querySelector(".songInfo");
 // Fetch all folders in the music directory
 async function displayAlbum() {
   try {
-    const response = await fetch('http://127.0.0.1:5500/music');
+    const response = await fetch('/music');
     const text = await response.text();
     const parser = new DOMParser();
     const htmlDoc = parser.parseFromString(text, 'text/html');
     const folderElements = htmlDoc.querySelectorAll('a[href*="/music/"]');
     const folders = Array.from(folderElements).map(element => {
-      const folderUrl = new URL(element.getAttribute('href'), 'http://127.0.0.1:5500/');
+      const folderUrl = new URL(element.getAttribute('href'), '/');
       return folderUrl.pathname.split('/').pop();
     });
     return folders;
