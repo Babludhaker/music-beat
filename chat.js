@@ -21,18 +21,21 @@ let songInfo = document.querySelector(".songInfo");
 // Fetch all folders in the music directory
 async function displayAlbum() {
   try {
-    const response = await fetch('/music'); // Use relative path
+    const response = await fetch("/music");
     const text = await response.text();
     const parser = new DOMParser();
-    const htmlDoc = parser.parseFromString(text, 'text/html');
+    const htmlDoc = parser.parseFromString(text, "text/html");
     const folderElements = htmlDoc.querySelectorAll('a[href*="/music/"]');
-    const folders = Array.from(folderElements).map(element => {
-      const folderUrl = new URL(element.getAttribute('href'), '/');
-      return folderUrl.pathname.split('/').pop();
+    const folders = Array.from(folderElements).map((element) => {
+      const folderUrl = new URL(
+        element.getAttribute("href"),
+        "http://127.0.0.1:5500/"
+      );
+      return folderUrl.pathname.split("/").pop();
     });
     return folders;
   } catch (error) {
-    console.error('Error fetching folders:', error);
+    console.error("Error fetching folders:", error);
     return [];
   }
 }
@@ -42,7 +45,7 @@ async function createCard() {
   const folders = await displayAlbum();
   const cardContainer = document.querySelector(".cardContainer");
 
-  folders.forEach(folder => {
+  folders.forEach((folder) => {
     const cardHTML = `
       <div data-folder="${folder}" class="card">
         <div class="play">
@@ -59,7 +62,7 @@ async function createCard() {
     cardContainer.innerHTML += cardHTML;
   });
 
-  document.querySelectorAll(".card").forEach(card => {
+  document.querySelectorAll(".card").forEach((card) => {
     card.addEventListener("click", () => {
       playSong(card.getAttribute("data-folder"));
     });
@@ -76,21 +79,26 @@ async function playSong(folder) {
 // Fetch songs from the given folder
 async function fetchSongs(folder) {
   try {
-    const response = await fetch(`/music/${folder}`); // Use relative path
+    const response = await fetch(`http://127.0.0.1:5500/music/${folder}`);
     const text = await response.text();
     const parser = new DOMParser();
     const htmlDoc = parser.parseFromString(text, "text/html");
     const songElements = htmlDoc.querySelectorAll("ul li a");
 
     return Array.from(songElements)
-      .map(element => {
-        const url = new URL(element.getAttribute("href"), `/music/${folder}/`); // Use relative path
+      .map((element) => {
+        const url = new URL(
+          element.getAttribute("href"),
+          `http://127.0.0.1:5500/${folder}/`
+        );
         if (url.pathname.endsWith(".mp3") || url.pathname.endsWith(".m4a")) {
-          return decodeURIComponent(url.pathname.split(`/${folder}/`)[1]).replace(/[+_]/g, " ");
+          return decodeURIComponent(
+            url.pathname.split(`/${folder}/`)[1]
+          ).replace(/[+_]/g, " ");
         }
         return null;
       })
-      .filter(song => song);
+      .filter((song) => song);
   } catch (error) {
     console.error("Error fetching songs:", error);
     return [];
@@ -100,7 +108,9 @@ async function fetchSongs(folder) {
 // Update song list UI
 function updateSongList(songs) {
   const songUl = songList.querySelector("ul");
-  songUl.innerHTML = songs.map(song => `
+  songUl.innerHTML = songs
+    .map(
+      (song) => `
     <li>
       <img class="invert" src="/images/music.svg" alt="">
       <div class="info">
@@ -111,9 +121,11 @@ function updateSongList(songs) {
         <img src="/images/play.svg" class="invert" alt="">
       </div>
     </li>
-  `).join('');
+  `
+    )
+    .join("");
 
-  Array.from(songList.getElementsByTagName("li")).forEach(e => {
+  Array.from(songList.getElementsByTagName("li")).forEach((e) => {
     e.addEventListener("click", () => {
       playMusic(e.querySelector(".info").firstElementChild.innerHTML);
       playbar.classList.add("barActive");
@@ -126,7 +138,7 @@ function updateSongList(songs) {
 function playMusic(track) {
   currentSongName = track;
   const encodedTrack = encodeURIComponent(track);
-  const songUrl = `/music/${currFolder}/${encodedTrack}`; // Use relative path
+  const songUrl = `http://127.0.0.1:5500/music/${currFolder}/${encodedTrack}`;
 
   currentSong.src = songUrl;
   currentSong.play();
@@ -134,8 +146,10 @@ function playMusic(track) {
   songInfo.innerText = track;
   songDuration.innerHTML = "00:00 / 00:00";
 
-  songListItems.forEach(li => li.classList.remove("currentlyPlaying"));
-  currentSongLi = Array.from(songListItems).find(li => li.textContent.includes(track));
+  songListItems.forEach((li) => li.classList.remove("currentlyPlaying"));
+  currentSongLi = Array.from(songListItems).find((li) =>
+    li.textContent.includes(track)
+  );
   if (currentSongLi) currentSongLi.classList.add("currentlyPlaying");
 
   localStorage.setItem("currentSongName", track);
@@ -148,11 +162,13 @@ function formatTime(seconds) {
 
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = Math.floor(seconds % 60);
-  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+  return `${String(minutes).padStart(2, "0")}:${String(
+    remainingSeconds
+  ).padStart(2, "0")}`;
 }
 
 // Event handlers
-seekBar.addEventListener("click", e => {
+seekBar.addEventListener("click", (e) => {
   const percent = (e.offsetX / e.target.getBoundingClientRect().width) * 100;
   Circles.style.left = `${percent}%`;
   currentSong.currentTime = (currentSong.duration * percent) / 100;
@@ -186,7 +202,9 @@ currentSong.addEventListener("timeupdate", () => {
   const currTime = currentSong.currentTime;
   const currDuration = currentSong.duration;
 
-  songDuration.innerHTML = `${formatTime(currTime)} / ${formatTime(currDuration)}`;
+  songDuration.innerHTML = `${formatTime(currTime)} / ${formatTime(
+    currDuration
+  )}`;
 
   if (currTime && currDuration) {
     const progress = (currTime / currDuration) * 100;
@@ -211,7 +229,7 @@ Volumes.addEventListener("click", () => {
   rangeContainer.classList.toggle("active");
 });
 
-volRange.addEventListener("input", e => {
+volRange.addEventListener("input", (e) => {
   currentSong.volume = e.target.value / 100;
 });
 
@@ -219,7 +237,11 @@ function init() {
   currentSongName = localStorage.getItem("currentSongName");
   const playbackState = localStorage.getItem("playbackState");
 
-  if (currentSongName && currentSongName !== "undefined" && currentSongName !== "null") {
+  if (
+    currentSongName &&
+    currentSongName !== "undefined" &&
+    currentSongName !== "null"
+  ) {
     songInfo.innerText = currentSongName;
     if (playbackState === "playing") {
       currentSong.play();
