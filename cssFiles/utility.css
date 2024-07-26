@@ -1,0 +1,80 @@
+.currentlyPlaying{
+  /* background-color: #4d6d5b; */
+  border: 2px solid #842a2a !important;
+}
+
+
+.flex{
+    display: flex;
+}
+.justify-center{
+    justify-content: center;
+}
+.item-center{
+    align-items: center;
+}
+.bg-black{
+    background-color: black;
+    color: white;
+}
+.invert{
+    filter: invert(1);
+}
+.bg-grey{
+    background-color: #121212;
+}
+.rounded{
+
+    border-radius: 7px;
+}
+.m-1{
+    margin: 5px;
+}
+.p-1{
+    padding: 10px;
+}
+/* For Dark Scroll bar Property */
+.cardContainer::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: #252525; /* dark background */
+  }
+  
+  .cardContainer::-webkit-scrollbar-thumb {
+    background-color: #444; /* dark thumb */
+    border-radius: 10px;
+  }
+  
+  .cardContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* dark thumb on hover */
+  }
+  
+  .cardContainer::-webkit-scrollbar-track {
+    background-color: #252525; /* dark track */
+  }
+
+  /* For Dark Scroll bar Property */
+  .songList::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    background-color: #333; /* dark background color */
+  }
+  
+  .songList::-webkit-scrollbar-thumb {
+    background-color: #555; /* dark thumb color */
+    border-radius: 10px;
+  }
+  
+  .songList::-webkit-scrollbar-thumb:hover {
+    background-color: #666; /* dark hover color */
+  }
+  
+  .songList::-webkit-scrollbar-track {
+    background-color: #333; /* dark track color */
+  }
+
+.pointer{
+  cursor: grab;
+}
+  
+  
