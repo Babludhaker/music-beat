@@ -7,7 +7,7 @@ let songList = document.querySelector(".songList");
 let songDuration = document.querySelector(".songTime");
 let Circles = document.querySelector(".circle");
 let seekBar = document.querySelector(".seekbar");
-let burger = document.querySelector(".Burger");
+let burger = document.querySelector(".burger"); // Corrected class name from .Burger to .burger
 let Close = document.querySelector(".close");
 let Next = document.querySelector("#next");
 let play = document.querySelector("#playbt");
@@ -121,7 +121,7 @@ function updateSongList(songs) {
         <img src="/images/play.svg" class="invert" alt="">
       </div>
     </li>
-  `
+    `
     )
     .join("");
 
